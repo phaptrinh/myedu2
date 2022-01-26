@@ -20,4 +20,10 @@ public class User {
     private String password;
     private String name;
     private int roleId;
+
+    public User(String username, String password, String name, int roleId) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+    }
 }
