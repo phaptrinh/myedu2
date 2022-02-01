@@ -18,7 +18,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student")
-@PreAuthorize("hasRole('STUDENT')")
+//@PreAuthorize("hasRole('ROLE_STUDENT')")
+@PreAuthorize("hasAuthority('STUDENT')")
 public class StudentController {
     @Autowired
     UserService userService;
@@ -29,6 +30,7 @@ public class StudentController {
     @GetMapping("/myClasses")
     public ResponseEntity<List<Class>> getMyClasses(Authentication authentication) {
         Object principal = authentication.getPrincipal();
+        System.out.println(authentication.getAuthorities());
 
         if (principal instanceof UserDetailsImpl) {
             int id = ((UserDetailsImpl)principal).getId();
