@@ -1,5 +1,9 @@
 package com.example.myedu.model.response;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class MessageResponse {
         private String message;
 

@@ -2,13 +2,16 @@ package com.example.myedu.service;
 
 import com.example.myedu.entity.Class;
 import com.example.myedu.entity.Enrollment;
+import com.example.myedu.exception.CustomException;
 import com.example.myedu.repository.ClassRepository;
 import com.example.myedu.repository.EnrollmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClassServiceImpl implements ClassService {
@@ -30,7 +33,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public Class getClassById(int id) {
-        return classRepository.findClassByClassId(id);
+        return classRepository.findByClassId(id).orElseThrow(() -> new CustomException("Khong tim thay lop nay", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -38,7 +41,7 @@ public class ClassServiceImpl implements ClassService {
         List<Class> classes = new ArrayList<>();
         List<Enrollment> enrollments = enrollmentRepository.findEnrollmentByStudentUserId(id);
         for (Enrollment enrollment : enrollments) {
-            classes.add(classRepository.findClassByClassId(enrollment.getClassId()));
+            classes.add(classRepository.getClassByClassId(enrollment.getClassId()));
         }
         return classes;
     }

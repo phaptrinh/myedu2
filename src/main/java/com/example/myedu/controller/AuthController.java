@@ -11,6 +11,7 @@ import com.example.myedu.security.jwt.JwtUtils;
 import com.example.myedu.security.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +19,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -66,14 +71,33 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, Errors errors) {
+        if (errors.hasErrors()) {
+            MessageResponse messageResponse = new MessageResponse();
+            List<FieldError> fieldErrors = errors.getFieldErrors();
+            List<String> errorFields = new ArrayList<>();
+            for (FieldError e : fieldErrors) {
+                errorFields.add(e.getField());
+            }
+            messageResponse.setMessage("Cac truong " + errorFields.toString() + " chua dung dinh dang!");
+            return new ResponseEntity<>(messageResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+
+        }
+
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Tai khoan nay da ton tai!"));
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                encoder.encode(signUpRequest.getPassword()), signUpRequest.getName(), 3);
+//        User user = new User(signUpRequest.getUsername(),
+//                encoder.encode(signUpRequest.getPassword()), signUpRequest.getName(), 3);
+        User user = new User();
+        user.setUsername(signUpRequest.getUsername());
+        String pw = encoder.encode(signUpRequest.getPassword());
+        user.setPassword(pw);
+//        System.out.println(pw);
+        user.setName(signUpRequest.getName());
+        user.setRoleId(3);
 
 //        Set<String> strRoles = signUpRequest.getRole();
 //        Set<Role> roles = new HashSet<>();
@@ -109,13 +133,13 @@ public class AuthController {
 //        user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Tao tai khoan thanh cong!"));
     }
 
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+                .body(new MessageResponse("Dang xuat thanh cong!"));
     }
 }
