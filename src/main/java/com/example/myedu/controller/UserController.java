@@ -1,9 +1,8 @@
 package com.example.myedu.controller;
 
-import com.example.myedu.entity.User;
+import com.example.myedu.entity.*;
 import com.example.myedu.entity.Class;
-import com.example.myedu.service.ClassService;
-import com.example.myedu.service.UserService;
+import com.example.myedu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,15 @@ public class UserController {
     @Autowired
     ClassService classService;
 
+    @Autowired
+    SubjectService subjectService;
+
+    @Autowired
+    RoomService roomService;
+
+    @Autowired
+    TimeService timeService;
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -38,5 +46,23 @@ public class UserController {
     public ResponseEntity<List<Class>> getAllClasses() {
         List<Class> classes = classService.getAllClasses();
         return new ResponseEntity<>(classes, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/subjects")
+    public ResponseEntity<List<Subject>> getAllSubjects() {
+        List<Subject> subjects = subjectService.getAllSubjects();
+        return new ResponseEntity<>(subjects, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/rooms")
+    public ResponseEntity<List<Room>> getAllRooms() {
+        List<Room> rooms = roomService.getAllRooms();
+        return new ResponseEntity<>(rooms, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/time")
+    public ResponseEntity<List<Time>> getAllTime() {
+        List<Time> time = timeService.getAllTime();
+        return new ResponseEntity<>(time, new HttpHeaders(), HttpStatus.OK);
     }
 }
