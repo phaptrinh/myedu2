@@ -3,10 +3,13 @@ package com.example.myedu.service;
 import com.example.myedu.entity.Class;
 import com.example.myedu.entity.Enrollment;
 import com.example.myedu.exception.CustomException;
+import com.example.myedu.model.request.ClassRequest;
+import com.example.myedu.model.response.MessageResponse;
 import com.example.myedu.repository.ClassRepository;
 import com.example.myedu.repository.EnrollmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +47,23 @@ public class ClassServiceImpl implements ClassService {
             classes.add(classRepository.getClassByClassId(enrollment.getClassId()));
         }
         return classes;
+    }
+
+    @Override
+    public ResponseEntity<?> createNewClass(ClassRequest classRequest) {
+        if (classRepository.findByTeacherUserIdAndSubjectIdAndRoomIdAndTimeId(classRequest.getTeacherUserId(), classRequest.getSubjectId(), classRequest.getRoomId(), classRequest.getTimeId()).isPresent()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Lop hoc da ton tai"));
+        }
+        Class c = Class.builder()
+                .name(classRequest.getName())
+                .teacherUserId(classRequest.getTeacherUserId())
+                .subjectId(classRequest.getSubjectId())
+                .roomId(classRequest.getRoomId())
+                .timeId(classRequest.getTimeId())
+                .build();
+        classRepository.save(c);
+
+        return ResponseEntity.ok(new MessageResponse("Tao lop hoc thanh cong"));
     }
 
 }

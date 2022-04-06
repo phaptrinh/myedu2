@@ -14,4 +14,6 @@ public interface UserService {
     User getUserByUsername(String username);
 
     ResponseEntity<?> createNewTeacher(SignupRequest signupRequest);
+
+    List<User> getAllTeachers();
 }

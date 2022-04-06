@@ -1,10 +1,12 @@
 package com.example.myedu.service;
 
 import com.example.myedu.entity.User;
+import com.example.myedu.exception.CustomException;
 import com.example.myedu.model.request.SignupRequest;
 import com.example.myedu.model.response.MessageResponse;
 import com.example.myedu.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,5 +43,10 @@ public class UserServiceImpl implements UserService {
         user.setRoleId(2);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("Them Giao vien thanh cong"));
+    }
+
+    @Override
+    public List<User> getAllTeachers() {
+        return userRepository.findAllByRoleId(2);
     }
 }

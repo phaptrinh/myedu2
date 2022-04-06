@@ -3,11 +3,13 @@ package com.example.myedu.controller;
 import com.example.myedu.entity.Role;
 import com.example.myedu.entity.User;
 import com.example.myedu.model.UserDTO;
+import com.example.myedu.model.request.ClassRequest;
+import com.example.myedu.model.request.RoomRequest;
 import com.example.myedu.model.request.SignupRequest;
+import com.example.myedu.model.request.TimeRequest;
 import com.example.myedu.model.response.MessageResponse;
 import com.example.myedu.security.service.UserDetailsImpl;
-import com.example.myedu.service.RoleService;
-import com.example.myedu.service.UserService;
+import com.example.myedu.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +38,15 @@ public class AdminController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    ClassService classService;
+
+    @Autowired
+    RoomService roomService;
+
+    @Autowired
+    TimeService timeService;
+
     @GetMapping("/users")
     ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers().stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
@@ -57,5 +68,39 @@ public class AdminController {
         return userService.createNewTeacher(signupRequest);
     }
 
+    @PostMapping("/newClass")
+    ResponseEntity<?> createNewClass(@RequestBody ClassRequest classRequest) {
+        return classService.createNewClass(classRequest);
+    }
+
+    @PostMapping("/newRoom")
+    ResponseEntity<?> createNewRoom(@RequestBody RoomRequest roomRequest) {
+        return roomService.createNewRoom(roomRequest);
+    }
+
+    @PutMapping("/rooms/{id}")
+    ResponseEntity<?> updateRoomById(@PathVariable Integer id, @RequestBody RoomRequest roomRequest) {
+        return roomService.updateById(id, roomRequest);
+    }
+
+    @DeleteMapping("/rooms/{id}")
+    ResponseEntity<?> deleteRoomById(@PathVariable Integer id) {
+        return roomService.deleteById(id);
+    }
+
+    @PostMapping("/newTime")
+    ResponseEntity<?> createNewTime(@RequestBody TimeRequest timeRequest) {
+        return timeService.createNewTime(timeRequest);
+    }
+
+    @PutMapping("/time/{id}")
+    ResponseEntity<?> updateTimeById(@PathVariable Integer id, @RequestBody TimeRequest timeRequest) {
+        return timeService.updateById(id, timeRequest);
+    }
+
+    @DeleteMapping("/time/{id}")
+    ResponseEntity<?> deleteTimeById(@PathVariable Integer id) {
+        return timeService.deleteById(id);
+    }
 
 }

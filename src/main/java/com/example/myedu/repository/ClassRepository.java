@@ -12,4 +12,6 @@ public interface ClassRepository extends JpaRepository<Class, Integer> {
     Optional<Class> findByClassId(Integer id);
 
     Class getClassByClassId(Integer id);
+
+    Optional<Class> findByTeacherUserIdAndSubjectIdAndRoomIdAndTimeId(Integer teacherUserId, Integer subjectIdm, Integer roomId, Integer timeId);
 }
