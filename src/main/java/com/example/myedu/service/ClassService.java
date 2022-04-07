@@ -16,4 +16,10 @@ public interface ClassService {
     List<Class> getStudentClassesById(int id);
 
     ResponseEntity<?> createNewClass(ClassRequest classRequest);
+
+    List<Integer> getSubjectIdsByTeacherId(Integer teacherId);
+
+    ResponseEntity<?> updateById(Integer id, ClassRequest classRequest);
+
+    ResponseEntity<?> deleteById(Integer id);
 }

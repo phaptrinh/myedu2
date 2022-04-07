@@ -5,6 +5,7 @@ import com.example.myedu.entity.Subject;
 import com.example.myedu.model.UserDTO;
 import com.example.myedu.security.service.UserDetailsImpl;
 import com.example.myedu.service.ClassService;
+import com.example.myedu.service.SubjectService;
 import com.example.myedu.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class TeacherController {
     ClassService classService;
 
     @Autowired
+    SubjectService subjectService;
+
+    @Autowired
     ModelMapper modelMapper;
 
     @GetMapping("/info")
@@ -41,8 +45,6 @@ public class TeacherController {
         return new ResponseEntity<>(userDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
-//    @GetMapping("/subjects")
-//    public ResponseEntity<List<Subject>> getAllSubject();
 
     @GetMapping("/myClasses")
     public ResponseEntity<List<Class>> getMyClasses(Authentication authentication) {
@@ -55,5 +57,13 @@ public class TeacherController {
         }
         return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
 
+    }
+
+    @GetMapping("/mySubjects")
+    public ResponseEntity<?> getMySubjects(Authentication authentication) {
+        Integer teacherId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        List<Integer> integers = classService.getSubjectIdsByTeacherId(teacherId);
+        List<Subject> subjects = subjectService.getAllBySubjectId(integers);
+        return new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 }

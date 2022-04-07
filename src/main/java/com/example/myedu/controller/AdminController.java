@@ -3,10 +3,7 @@ package com.example.myedu.controller;
 import com.example.myedu.entity.Role;
 import com.example.myedu.entity.User;
 import com.example.myedu.model.UserDTO;
-import com.example.myedu.model.request.ClassRequest;
-import com.example.myedu.model.request.RoomRequest;
-import com.example.myedu.model.request.SignupRequest;
-import com.example.myedu.model.request.TimeRequest;
+import com.example.myedu.model.request.*;
 import com.example.myedu.model.response.MessageResponse;
 import com.example.myedu.security.service.UserDetailsImpl;
 import com.example.myedu.service.*;
@@ -47,6 +44,9 @@ public class AdminController {
     @Autowired
     TimeService timeService;
 
+    @Autowired
+    SubjectService subjectService;
+
     @GetMapping("/users")
     ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers().stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
@@ -71,6 +71,16 @@ public class AdminController {
     @PostMapping("/newClass")
     ResponseEntity<?> createNewClass(@RequestBody ClassRequest classRequest) {
         return classService.createNewClass(classRequest);
+    }
+
+    @PutMapping("/classes/{id}")
+    ResponseEntity<?> updateClassById(@PathVariable Integer id, @RequestBody ClassRequest classRequest) {
+        return classService.updateById(id, classRequest);
+    }
+
+    @DeleteMapping("/classes/{id}")
+    ResponseEntity<?> deleteClassById(@PathVariable Integer id) {
+        return classService.deleteById(id);
     }
 
     @PostMapping("/newRoom")
@@ -101,6 +111,21 @@ public class AdminController {
     @DeleteMapping("/time/{id}")
     ResponseEntity<?> deleteTimeById(@PathVariable Integer id) {
         return timeService.deleteById(id);
+    }
+
+    @PostMapping("/newSubject")
+    ResponseEntity<?> createNewSubject(@RequestBody SubjectRequest subjectRequest) {
+        return subjectService.createNewSubject(subjectRequest);
+    }
+
+    @PutMapping("/subjects/{id}")
+    ResponseEntity<?> updateSubjectById(@PathVariable Integer id, @RequestBody SubjectRequest subjectRequest) {
+        return subjectService.updateById(id, subjectRequest);
+    }
+
+    @DeleteMapping("/subjects/{id}")
+    ResponseEntity<?> deleteSubjectById(@PathVariable Integer id) {
+        return subjectService.deleteById(id);
     }
 
 }
