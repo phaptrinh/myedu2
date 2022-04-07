@@ -4,7 +4,7 @@
 
 ## API
 
-### ALL ROLE
+### ALL ROLE 
 | Method | API            | Response Body                                             | Description     |
 |--------|----------------|-----------------------------------------------------------|-----------------|
 | POST   | auth/signin    | {id, username, roleName}                                  | login           |
