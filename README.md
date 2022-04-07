@@ -1,10 +1,10 @@
 # MYEDU
 ### This is simple Spring Boot project, the idea was to build basic back-end for course management web app.
-
 ### It was made using Spring Boot, Spring Security, Spring Data JPA, RESTful API. Database is MySQL.
-## API
-###ALL ROLE
 
+## API
+
+### ALL ROLE
 | Method | API            | Response Body                                             | Description     |
 |--------|----------------|-----------------------------------------------------------|-----------------|
 | POST   | auth/signin    | {id, username, roleName}                                  | login           |
