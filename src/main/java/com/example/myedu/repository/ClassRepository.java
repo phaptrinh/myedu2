@@ -20,4 +20,6 @@ public interface ClassRepository extends JpaRepository<Class, Integer> {
 
     @Query( "select c.subjectId from Class c where c.teacherUserId = :id" )
     List<Integer> findSubjectIdByTeacherUserId(int id);
+
+    boolean existsByClassId(Integer id);
 }

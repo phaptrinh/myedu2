@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ClassService {
     List<Class> getAllClasses();
+
     List<Class> getTeacherClassesById(int id);
 
     Class getClassById(int id);
@@ -22,4 +23,5 @@ public interface ClassService {
     ResponseEntity<?> updateById(Integer id, ClassRequest classRequest);
 
     ResponseEntity<?> deleteById(Integer id);
+    boolean existClassByClassId(int classId);
 }

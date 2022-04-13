@@ -103,4 +103,9 @@ public class ClassServiceImpl implements ClassService {
         throw new CustomException("Khong tim thay lop hoc", HttpStatus.NOT_FOUND);
     }
 
+    @Override
+    public boolean existClassByClassId(int classId) {
+        return classRepository.existsByClassId(classId);
+    }
+
 }

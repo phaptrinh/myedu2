@@ -70,7 +70,7 @@ public class StudentController {
             if (enrollmentService.existsByStudentUserIdAndClassId(studentUserId, classId)) {
                 return new ResponseEntity<>(new MessageResponse("Hoc sinh da tham gia lop nay"), new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
             }
-            if (!enrollmentService.existsEnrollmentByClassId(classId)) {
+            if (!classService.existClassByClassId(classId)) {
                 return new ResponseEntity<>(new MessageResponse("Khong ton tai lop hoc nay"), new HttpHeaders(), HttpStatus.NOT_FOUND);
             }
             enrollmentService.enrollClassById(studentUserId, classId);
